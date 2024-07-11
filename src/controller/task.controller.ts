@@ -15,7 +15,7 @@ export function getAllTasks(req: Request, res: Response, next: NextFunction) {
     const tasks = taskService.getTasks(parseInt(user.id)); //get all tasks from the services
     res.status(HttpStatusCodes.OK).json(tasks);
   } catch(error){
-    next(new ServerError("Tasks Could Not Be Fetched"));
+    next();
   }
 }
 
@@ -28,7 +28,7 @@ export function getTaskById(req: Request, res: Response, next: NextFunction) {
     const task = taskService.getTaskById(parseInt(id), parseInt(user.id)); //get specific task
     res.json(task);
   } catch (error) {
-    next(new ServerError("Task with this Id Could Not Be Fetched"));
+    next();
   }
 }
 
@@ -40,7 +40,7 @@ export function deleteTaskById(req: Request, res: Response, next: NextFunction) 
     const { id } = req.params; //extract the task ID
     res.status(HttpStatusCodes.OK).json(taskService.deleteTaskById(parseInt(id), parseInt(user.id))); //delete specific task
   } catch (error) {
-    next(new ServerError("Task with this Id Could Not Be Deleted"));
+    next();
   }
 }
 
@@ -53,7 +53,7 @@ export function createTask(req: Request, res: Response, next: NextFunction) {
     taskService.createTask(body, parseInt(userId)); //create the task
     res.status(HttpStatusCodes.OK).json({ message: "Task created" });
   } catch(error){
-    next(new ServerError("Task Could Not be Created"));
+    next();
   }
 }
 
@@ -67,7 +67,7 @@ export function updateTaskById(req: Request, res: Response, next: NextFunction) 
     taskService.updateTaskById(id, body, parseInt(user.id)); //make changes to the task
     res.status(HttpStatusCodes.OK).json({ message: "Task Updated" });
   } catch (error) {
-    next(new ServerError("Tasks with this Id Could Not Be Updated"));
+    next();
   }
 }
 

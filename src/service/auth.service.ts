@@ -7,6 +7,7 @@ import { sign, verify } from "jsonwebtoken";
 import config from "../config";
 import loggerWithNameSpace from "../utils/logger";
 import { ClientError } from "../error/ClientError";
+import { ServerError } from "../error/ServerError";
 
 const logger = loggerWithNameSpace ("AuthService");
 
@@ -49,17 +50,20 @@ export async function login(body: Pick<User, "email" | "password">) {
 
 export async function refresh(refreshToken: string) {
   logger.info("Called refresh")
-  try {
-    const decoded = await verify(refreshToken, config.jwt.secret!);
-    const { id, name, email } = decoded as User;
-    const payload = { id, name, email };
-    const newAccessToken = await sign(payload, config.jwt.secret!, {
-      expiresIn: config.jwt.accessTokenExpiryMS,
-    });
-    return {
-      accessToken: newAccessToken,
-    };
-  } catch (error){
-    throw new ClientError("invalid refresh token")
+  const decoded = await verify(refreshToken, config.jwt.secret!);
+
+  if(!decoded){
+    throw new ClientError("refreshToken incorrect")
   }
+  const { id, name, email } = decoded as User;
+  const payload = { id, name, email };
+  const newAccessToken = await sign(payload, config.jwt.secret!, {
+    expiresIn: config.jwt.accessTokenExpiryMS,
+  });
+  if(!newAccessToken){
+    new ServerError("could not generate access token")
+  }
+  return {
+    accessToken: newAccessToken,
+  };
 }

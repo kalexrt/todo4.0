@@ -3,6 +3,7 @@ import { getUserQuery, User } from "../interfaces/user.interface";
 import * as taskModel from "../model/task.model"
 import * as userModel from "../model/user.model";
 import loggerWithNameSpace from "../utils/logger";
+import { ClientError } from "../error/ClientError";
 
 const logger = loggerWithNameSpace("UserService");
 
@@ -11,9 +12,7 @@ export function getUserById(id: number) {
   logger.info("Called getUserById");
   const data = userModel.getUserById(id);
   if (!data) {
-    return {
-      error: `User with id: ${id} not found`,
-    };
+    throw new ClientError("User with this Id does not exist")
   }
   return data;
 }
@@ -38,6 +37,9 @@ export function getUsers(query: getUserQuery) {
 export function getUserByEmail(email: string) {
   logger.info("Called getUserByEmail");
   const data = userModel.getUserByEmail(email);
+  if(!data){
+    throw new ClientError("User with this email does not exist")
+  }
   return data;
 }
 

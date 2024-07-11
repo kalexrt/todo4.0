@@ -13,12 +13,8 @@ export async function login(req: Request, res: Response, next: NextFunction) {
     const { body } = req;
     const data = await authService.login(body);
     res.status(HttpStatusCodes.OK).json(data);
-  } catch ( error) {
-    if( error instanceof ClientError){
-      next(error);
-    }else{ 
-      next(new ServerError("Login Failed"));
-    }
+  } catch (error) {
+    next()
   }
 }
 
@@ -31,6 +27,6 @@ export async function refresh(req:Request, res: Response, next: NextFunction){
     const data = await authService.refresh(refreshToken);
     res.status(HttpStatusCodes.OK).json(data);
   } catch (error){
-    next(new ServerError("Refresh Failed"));
+    next();
   }
 }

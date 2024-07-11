@@ -20,7 +20,7 @@ export function getUsers(
     const data = userService.getUsers(query);
     res.status(HttpStatusCodes.OK).json(data);
   } catch (error) {
-    next(new ServerError("Data Could Not Be Fetched")); // pass error to the error handling middleware
+    next(); // pass error to the error handling middleware
   }
 }
 
@@ -32,7 +32,7 @@ export function getUserById(req: Request, res: Response, next: NextFunction) {
     const data = userService.getUserById(parseInt(id));
     res.status(HttpStatusCodes.OK).json(data);
   } catch (error) {
-    next(new ServerError("Data Could Not Be Fetched")); // pass error to the error handling middleware
+    next(); // pass error to the error handling middleware
   }
 }
 
@@ -46,7 +46,7 @@ export async function createUser(req: Request, res: Response, next: NextFunction
       message: "User created",
     });
   } catch (error) {
-    next( new ServerError("User Could Not Be Created"));
+    next();
   }
 }
 
@@ -59,7 +59,7 @@ export function updateUserById(req: Request, res: Response, next: NextFunction) 
     const updatedUser = userService.updateUserById(id, updatedUserData);
     res.status(HttpStatusCodes.OK).json({ message: "User updated", data: updatedUser });
   } catch (error) {
-    next( new ServerError("User Could Not Be Updated"));
+    next();
   }
 }
 
@@ -69,6 +69,6 @@ export function deleteUserById(req: Request, res: Response, next:NextFunction){
     const { id } = req.params; //extract the user ID
     res.status(HttpStatusCodes.OK).json(userService.deleteUserById(parseInt(id))); //delete specific user
   } catch (error) {
-    next( new ServerError("User Could Not be Deleted"))
+    next();
   }
 }
