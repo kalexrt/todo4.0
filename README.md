@@ -21,7 +21,7 @@ npm start
 ### Docker setup
 
 ```bash
-docker pull kalexrt/usertodo:0.1.0
+docker pull kalexrt/todo:0.2.0
 ```
 
 ### Setup .env file
